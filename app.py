@@ -177,11 +177,37 @@ def book_edit(id):
         'authors': authors
     }
     if request.method == 'POST' and form.validate():
-        pass
-            
+        if form.author_name.data == authors:
+            updated_book = Book.query.filter_by(id=id).update({ Book.name: form.book_name.data})
+            db.session.commit()
+        else:
+            book.authors = []
+            new_authors = form.author_name.data.split(', ')
+            for author in new_authors:
+                new_author = Author.query.filter_by(name=author).first()
+                if not new_author:
+                    new_author = Author(name=author)
+                    new_author.save()
+                    book.authors.append(new_author)
+                elif not new_author in book.authors:
+                    book.authors.append(new_author)
 
+            book.save()
+        
+        flash(f'Book updated', category='success')
+        return redirect(url_for('index'))
+            
     return render_template('book_edit.html', context=context)
 
 
+@app.route('/book/delete/<int:id>', methods=['POST'])
+def book_delete(id):
+    book = Book.query.get(id)
+    db.session.delete(book)
+    db.session.commit()
+    flash(f'{book.name} has been deleted', category='success')
+    return redirect(url_for('index'))
+
+    
 if __name__ == '__main__':
     app.run(debug=True)

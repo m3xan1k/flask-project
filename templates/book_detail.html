@@ -7,7 +7,13 @@
     </p>
     <div class="btn-group" role="group" aria-label="Basic example">
         <a href="/book/edit/{{ book.id }}" class="btn btn-warning">Edit</a>
-        <a href="/book/delete/{{ book.id }}" class="btn btn-danger">Delete</a>
+        <form class="form-inline" action="/book/delete/{{ book.id }}" method="post">
+            <input type="hidden">
+            <button href="" class="btn btn-danger">Delete</button>
+        </form>
     </div>
+
+    
+    
 
 {% endblock content %}
