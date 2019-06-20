@@ -76,7 +76,8 @@ def load_user(id):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    authors = Author.query.all()
+    return render_template('index.html', authors=authors)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -157,6 +158,12 @@ def book_add():
         return redirect(url_for('index'))
 
     return render_template('book_add.html', form=form)
+
+
+@app.route('/book/detail/<int:id>')
+def book_detail(id):
+    book = Book.query.get(id)
+    return render_template('book_detail.html', book=book)
 
 
 if __name__ == '__main__':

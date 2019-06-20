@@ -2,6 +2,42 @@
 
 {% block content %}
 
-    <h1>Digital Library</h1>
+    <h1 class="display-3 mb-5">Digital Library</h1>
+
+    {% for author in authors %}
+
+        <div class="mb-5">
+        <h2 class="mb-3">{{ author.name }}</h2>
+
+        {% for row in author.books | batch(3) %}
+        <div class="card-deck">
+        {% for book in row %}
+        
+        <!-- Card -->
+        <div class="card mb-4">
+
+        <!-- Card image 
+        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap"> -->
+
+        <!-- Card content -->
+        <div class="card-body">
+
+            <!-- Title -->
+            <h4 class="card-title"><a>{{ book.name }}</a></h4>
+            <!-- Text -->
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <!-- Button -->
+            <a href="/book/detail/{{ book.id }}" class="btn btn-primary">Read more</a>
+
+        </div>
+
+        </div>
+        
+        <!-- Card -->
+        {% endfor %}
+        </div>
+        {% endfor %}
+        </div>
+    {% endfor %}
 
 {% endblock content %}
