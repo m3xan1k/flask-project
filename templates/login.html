@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+ {{ block.super() }} | LogIn
+{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center">LogIn</h1>
+
+<form action="/login" method="post">
+    {% for field in form %}
+        <div class="md-form">
+            {{ field(class_="form-control") }}
+            {{ field.label }}
+        </div>
+    {% endfor %}
+    <button class="btn btn-mdb-color">LogIn</button>
+</form>
+
+{% endblock content %}

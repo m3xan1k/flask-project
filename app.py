@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import LoginManager, current_user, login_user, logout_user, UserMixin
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -25,7 +25,7 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), nullable=False)
     username = db.Column(db.String(30), unique=True, nullable=False)
@@ -44,7 +44,7 @@ class RegistrationForm(Form):
 
 class LoginForm(Form):
     username = StringField('Username', [validators.InputRequired()])
-    password = StringField('Password', [validators.InputRequired()])
+    password = PasswordField('Password', [validators.InputRequired()])
 
 class BookForm(Form):
     book_name = StringField('Book Name', [validators.InputRequired()])
@@ -86,6 +86,31 @@ def signup():
         return redirect(url_for('index'))
 
     return render_template('signup.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        user = User.query.filter_by(username=form.username.data).first()
+
+        if user and sha256_crypt.verify(form.password.data, user.password):
+            login_user(user)
+            flash('You successfully logged in', category='success')
+            return redirect(url_for('index'))
+        else:
+            flash('Username or password is incorrect', category='danger')
+            return render_template('login.html', form=form)
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('You logged out', category='success')
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
