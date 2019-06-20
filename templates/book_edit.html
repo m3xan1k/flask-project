@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+<form action="/book/edit/{{ context.book.id }}" method="post">
+        <div class="md-form">
+            {{ context.form.book_name(class_="form-control", value=context.book.name ) }}
+            {{ context.form.book_name.label }}
+        </div>
+        <div class="md-form">
+            {{ context.form.author_name(class_="form-control", value=context.authors ) }}
+            {{ context.form.author_name.label }}
+        </div>
+    <button type="submit" class="btn btn-mdb-color">Save Book</button>
+</form>
+
+{% endblock content %}

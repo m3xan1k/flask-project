@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+    <h1 class="text-center mb-5">{{ book.name }}</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae eveniet, placeat voluptas quas ut quis consectetur qui sunt! Iste, reiciendis repellendus sint quaerat perspiciatis nemo necessitatibus inventore minima quam quasi.
+    </p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="/book/edit/{{ book.id }}" class="btn btn-warning">Edit</a>
+        <a href="/book/delete/{{ book.id }}" class="btn btn-danger">Delete</a>
+    </div>
+
+{% endblock content %}

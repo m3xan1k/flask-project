@@ -166,5 +166,22 @@ def book_detail(id):
     return render_template('book_detail.html', book=book)
 
 
+@app.route('/book/edit/<int:id>', methods=['GET', 'POST'])
+def book_edit(id):
+    form = BookForm(request.form)
+    book = Book.query.get(id)
+    authors = ', '.join([author.name for author in book.authors])
+    context = {
+        'form': form,
+        'book': book,
+        'authors': authors
+    }
+    if request.method == 'POST' and form.validate():
+        pass
+            
+
+    return render_template('book_edit.html', context=context)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
