@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+<form action="/book/add" method="post">
+    {% for field in form %}
+        <div class="md-form">
+            {{ field(class_="form-control") }}
+            {{ field.label }}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-mdb-color">Add Book</button>
+</form>
+
+{% endblock content %}

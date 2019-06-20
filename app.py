@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 # Models
 books = db.Table('books',
     db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True),
-    db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True)
+    db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True),
 )
 
 class Author(db.Model):
@@ -21,9 +21,20 @@ class Author(db.Model):
     name = db.Column(db.String(120), nullable=False, unique=True)
     books = db.relationship('Book', secondary=books, lazy='subquery', backref=db.backref('authors', lazy=True))
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def has_book(self):
+        print(self.books)
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -111,6 +122,41 @@ def logout():
     logout_user()
     flash('You logged out', category='success')
     return redirect(url_for('index'))
+
+
+@app.route('/book/add', methods=['GET', 'POST'])
+def book_add():
+    form = BookForm(request.form)
+    if request.method == 'POST' and form.validate():
+        author = Author.query.filter_by(name=form.author_name.data).first()
+
+        if author:
+            books = list(map(lambda book: book.name, author.books))
+
+            if form.book_name.data not in books:
+
+                new_book = Book(name=form.book_name.data)
+                author.books.append(new_book)
+                author.save()
+
+                flash(f'{new_book.name} successfully added for {author.name}')
+                return redirect(url_for('index'))
+            else:
+                flash('This author already has this book')
+                return render_template('book_add.html', form=form)
+
+        else:
+            author = Author(name=form.author_name.data)
+            book = Book(name=form.book_name.data)
+            author.books.append(book)
+            
+            author.save()
+            book.save()
+        
+        flash(f'{book.name} successfully added for {author.name}')
+        return redirect(url_for('index'))
+
+    return render_template('book_add.html', form=form)
 
 
 if __name__ == '__main__':
