@@ -2,16 +2,9 @@
 
 {% block content %}
 
-    <h1 class="display-3 mb-5">Digital Library</h1>
+    <h1>{{ author.name }}</h1>
 
-    {% for author in authors %}
-
-        <div class="mb-5">
-        <h2 class="mb-3">{{ author.name }}</h2>
-
-        {% for row in author.books | batch(2) %}
-        <div class="card-deck">
-        {% for book in row %}
+    {% for book in author.books %}
         
         <!-- Card -->
         <div class="card mb-4">
@@ -42,9 +35,5 @@
         
         <!-- Card -->
         {% endfor %}
-        </div>
-        {% endfor %}
-        </div>
-    {% endfor %}
 
-{% endblock content %}
+{% endblock %}
