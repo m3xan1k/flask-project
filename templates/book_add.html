@@ -5,7 +5,11 @@
 <form action="/book/add" method="post">
     {% for field in form %}
         <div class="md-form">
-            {{ field(class_="form-control") }}
+            {% if field.type == "TextAreaField" %}
+                {{ field(class_="md-textarea form-control") }}
+            {% else %}
+                {{ field(class_="form-control") }} 
+            {% endif %}
             {{ field.label }}
         </div>
     {% endfor %}

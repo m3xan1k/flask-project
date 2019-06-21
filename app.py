@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import Form, StringField, PasswordField, validators
+from wtforms import Form, StringField, PasswordField, validators, TextAreaField
 from passlib.hash import sha256_crypt
 from flask_login import LoginManager, current_user, login_user, logout_user, UserMixin
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 # Models
@@ -25,12 +27,11 @@ class Author(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def has_book(self):
-        print(self.books)
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.Text, nullable=False)
 
     def save(self):
         db.session.add(self)
@@ -60,6 +61,7 @@ class LoginForm(Form):
 class BookForm(Form):
     book_name = StringField('Book Name', [validators.InputRequired()])
     author_name = StringField('Author Name', [validators.InputRequired()])
+    book_description = TextAreaField('Book Description', [validators.InputRequired()])
 
 class SearchForm(Form):
     query =  StringField('Search', [validators.InputRequired()])
@@ -136,7 +138,7 @@ def book_add():
 
             if form.book_name.data not in books:
 
-                new_book = Book(name=form.book_name.data)
+                new_book = Book(name=form.book_name.data, description=form.book_description.data)
                 author.books.append(new_book)
                 author.save()
 
@@ -148,7 +150,7 @@ def book_add():
 
         else:
             author = Author(name=form.author_name.data)
-            book = Book(name=form.book_name.data)
+            book = Book(name=form.book_name.data, description=form.book_description.data)
             author.books.append(book)
             
             author.save()
@@ -178,7 +180,7 @@ def book_edit(id):
     }
     if request.method == 'POST' and form.validate():
         if form.author_name.data == authors:
-            updated_book = Book.query.filter_by(id=id).update({ Book.name: form.book_name.data})
+            updated_book = Book.query.filter_by(id=id).update({ Book.name: form.book_name.data, Book.description: form.book_description.data})
             db.session.commit()
         else:
             book.authors = []
@@ -189,6 +191,7 @@ def book_edit(id):
                     new_author = Author(name=author)
                     new_author.save()
                     book.authors.append(new_author)
+                    book.description = form.book_description.data
                 elif not new_author in book.authors:
                     book.authors.append(new_author)
 

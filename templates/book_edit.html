@@ -11,6 +11,10 @@
             {{ context.form.author_name(class_="form-control", value=context.authors ) }}
             {{ context.form.author_name.label }}
         </div>
+        <div class="md-form">
+            <textarea class="md-textarea form-control" name="book_description" cols="30" rows="5">{{ context.book.description }}</textarea>
+            <label for="book_description">Book Description</label>
+        </div> 
     <button type="submit" class="btn btn-mdb-color">Save Book</button>
 </form>
 
