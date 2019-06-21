@@ -160,11 +160,6 @@ def book_add():
     return render_template('book_add.html', form=form)
 
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> merge
 @app.route('/book/detail/<int:id>')
 def book_detail(id):
     book = Book.query.get(id)
@@ -214,9 +209,5 @@ def book_delete(id):
     return redirect(url_for('index'))
 
     
-<<<<<<< HEAD
-=======
->>>>>>> master
->>>>>>> merge
 if __name__ == '__main__':
     app.run(debug=True)
