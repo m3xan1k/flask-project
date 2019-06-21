@@ -1,6 +1,8 @@
 # flask-project
 ## По мотивам одного тестового задания
 
+![Alt text](Screenshot.png?raw=true "Title")
+
 Исходное ТЗ: https://github.com/avezhenya/flask-project
 
 
