@@ -211,11 +211,17 @@ def book_delete(id):
     flash(f'{book.name} has been deleted', category='success')
     return redirect(url_for('index'))
 
+
 @app.route('/author/<id>')
 def author_detail(id):
     author = Author.query.get(id)
     return render_template('author_detail.html', author=author)
 
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+    
     
 if __name__ == '__main__':
     app.run(debug=True)

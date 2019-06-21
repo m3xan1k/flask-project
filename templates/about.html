@@ -1,0 +1,39 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+<h1 class="mb-5 text-center">About DigLib Developer</h1>
+
+<!-- Card Regular -->
+<div class="row justify-content-center">
+<div class="card card-cascade col-4">
+
+  <!-- Card image -->
+  <div class="view view-cascade overlay">
+    <img class="card-img-top" src="{{ url_for('static', filename='35059951.jpeg') }}" alt="Card image cap">
+  </div>
+
+  <!-- Card content -->
+  <div class="card-body card-body-cascade text-center">
+
+    <!-- Title -->
+    <h4 class="card-title"><strong>m3xan1k</strong></h4>
+    <!-- Subtitle -->
+    <h6 class="font-weight-bold py-2">Web developer</h6>
+    <!-- Text -->
+    <p class="card-text">Love to develop web apps!
+    </p>
+
+ 
+    <a href="https://github.com/m3xan1k" class="btn-floating btn-lg grey lighten-2 text-dark"><i class="fab fa-github pr-1"></i></a>
+
+    <a href="https://t.me/m3xan1k" class="btn-floating btn-lg grey lighten-2 text-dark"><i class="fab fa-telegram"></i></a>
+
+  </div>
+
+</div>
+<!-- Card Regular -->
+</div>
+
+
+{% endblock %}
